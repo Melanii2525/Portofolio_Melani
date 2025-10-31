@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Portofolio</title>
+  <link rel="stylesheet" href="/css/landingpage.css">
+  <link href="https://fonts.cdnfonts.com/css/post-no-bills-jaffna" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="welcome-page">
+    <div class="stars"></div>
+
+    <div class="star-container">
+      <div class="star">✧</div>
+      <div class="star">✦</div>
+      <div class="star">✦</div>
+      <div class="star">✧</div>
+    </div>
+
+    <div class="welcome-card">
+      <div class="welcome-text">
+        <h1 class="welcome-title">
+          PORTO<span>FOLIO</span>
+        </h1>
+        <p>
+          Ingin tahu hasil karya & pengalaman saya selama PKL?
+          <br />
+          Klik di bawah ini ↓
+        </p>
+        <a href="/about">
+          <button class="btn-modern">Lihat Portofolio</button>
+        </a>
+
+        <div class="mobile-dt">
+          <div><%= currentTime %></div>
+          <div><%= currentDate %></div>
+        </div>
+      </div>
+
+      <div class="welcome-img">
+        <img src="/assets/me7.png" alt="Avatar" />
+      </div>
+    </div>
+
+    <div class="desktop-dt">
+      <div><%= currentTime %></div>
+      <div><%= currentDate %></div>
+    </div>
+  </div>
+</body>
+
+<script>
+  function updateDateTime() {
+    const now = new Date();
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const timeString = `${hours}:${minutes}:${seconds}`;
+
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateString = now.toLocaleDateString('id-ID', options);
+
+    document.querySelectorAll('.desktop-dt div:first-child, .mobile-dt div:first-child')
+      .forEach(el => el.textContent = timeString);
+
+    document.querySelectorAll('.desktop-dt div:last-child, .mobile-dt div:last-child')
+      .forEach(el => el.textContent = dateString);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    updateDateTime();              
+    setInterval(updateDateTime, 1000); 
+  });
+</script>
+</html>
+
+

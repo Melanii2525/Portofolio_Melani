@@ -1,0 +1,150 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .login-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    background: #1A141A;
+    color: #F4B315; 
+  }
+
+  .login-left {
+    position: relative;
+    flex: 1.2;
+    background: url('/assets/burun.jpg') no-repeat center center/cover;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 2rem;
+  }
+
+  .login-left .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 20, 26, 0.6);
+    backdrop-filter: blur(6px);
+    z-index: 0;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+  }
+
+  .login-text {
+    position: relative;
+    z-index: 1;
+    max-width: 280px;
+  }
+  
+  .login-text h4 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #F4B315;
+  }
+  
+  .login-text p {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #D3AF85;
+  }
+
+  .login-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 4rem;
+    position: relative;
+  }
+
+  .login-right h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #F4B315; 
+  }
+  
+  .login-right p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    color: #D3AF85; 
+  }
+
+  .alert-danger {
+    background-color: rgba(229, 71, 71, 0.25); 
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    color: #E59312; 
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-control {
+    background: #423738;
+    border: 1px solid #8E5915; 
+    border-radius: 8px;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    color: #D3AF85; 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .form-control::placeholder {
+    color: #8E5915; 
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: #F4B315;
+    box-shadow: 0 0 8px #F4B315aa;
+    background: #1A141A;
+    color: #F4B315;
+  }
+
+  .btn-primary {
+    background: linear-gradient(90deg, #F4B315 0%, #E59312 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 0.85rem 0;
+    color: #1A141A;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(244, 179, 21, 0.5);
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(90deg, #E59312 0%, #F4B315 100%);
+    box-shadow: 0 6px 18px rgba(244, 179, 21, 0.8);
+  }
+  
+  /* === RESPONSIVE === */
+  @media (max-width: 900px) {
+    .login-container {
+      flex-direction: column;
+    }
+    .login-left {
+      flex: none;
+      height: 40vh;
+      border-radius: 0 0 20px 20px;
+    }
+    .login-right {
+      flex: none;
+      padding: 2rem;
+    }
+  }

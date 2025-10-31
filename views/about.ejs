@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Portofolio | Melani Azzura</title>
+  <link rel="stylesheet" href="/css/about.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header class="hero">
+    <!-- NAVBAR SECTION -->
+    <nav class="navbar">
+      <div class="left-section">
+        <h1 class="logo">Melani <span>Azzura</span></h1>
+
+        <div class="menu-toggle" id="menu-toggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    
+      <ul id="menu">
+        <li><a href="#">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#portofolio">Portofolio</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#feedback">Feedback</a></li>
+      </ul>
+    </nav>     
+
+    <!-- HOME SECTION -->
+    <div class="hero-content fade-up">
+      <h2 class="fade-up">Hi, I am <span>Melani Azzura</span></h2>
+      <p class="fade-up">Pelajar SMK | Rekayasa Perangkat Lunak. Saya membuat website dengan desain modern dan interaktif.</p>
+      <div class="hero-icons fade-up">
+        <a href="mailto:dozukim@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://github.com/Melanii2525" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://www.instagram.com/dozu_kim/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://t.me/dozuu12" target="_blank" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+        <a href="https://wa.me/085791294380" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+
+      <div class="scroll-down fade-up">
+        <a href="#about" aria-label="Scroll ke bawah">
+          <i class="fa-solid fa-angle-down"></i>
+        </a>
+      </div>      
+    </div>
+  </header>  
+
+  <!-- ABOUT SECTION -->
+  <section id="about" class="about">
+    <div class="about-img">
+      <img src="/assets/me6.png" alt="Profile">
+      <span class="star">✦</span>
+      <span class="star">✧</span>
+      <span class="star">✦</span>
+    </div>
+
+    <div class="about-info">
+      <h3>Hi there! I'm <span>Melani Azzura Najma</span></h3>
+      <h4>Fullstack Web Developer</h4>
+      <p>Saya siswa kelas XII RPL A yang sedang melaksanakan PKL di Datasoft Solusi Indonesia.
+        Disini saya mendokumentasikan perkembangan skills & progres project setiap bulan.</p>
+
+      <div class="skill-list">
+        <div class="skill">
+          <span class="label">HTML</span>
+          <div class="bar-container">
+            <div class="bar" style="width:85%"></div>
+          </div>
+          <span class="percent">85%</span>
+        </div>
+      
+        <div class="skill">
+          <span class="label">CSS</span>
+          <div class="bar-container">
+            <div class="bar" style="width:85%"></div>
+          </div>
+          <span class="percent">85%</span>
+        </div>
+      
+        <div class="skill">
+          <span class="label">JavaScript</span>
+          <div class="bar-container">
+            <div class="bar" style="width:75%"></div>
+          </div>
+          <span class="percent">75%</span>
+        </div>
+      
+        <div class="skill">
+          <span class="label">Flutter</span>
+          <div class="bar-container">
+            <div class="bar" style="width:50%"></div>
+          </div>
+          <span class="percent">50%</span>
+        </div>
+      
+        <div class="skill">
+          <span class="label">PHP</span>
+          <div class="bar-container">
+            <div class="bar" style="width:25%"></div>
+          </div>
+          <span class="percent">25%</span>
+        </div>
+      </div>    
+
+      <a href="/assets/Melani Azzura - CV.pdf" class="btn-cv" target="_blank">Download CV</a>
+    </div>
+  </section>
+
+  <!-- SKILLS SECTION -->
+  <section class="skills" id="skills">
+    <div class="skill-title">
+      <span>MY SKILLS</span>
+    </div>
+
+    <div class="container-skills">
+      <div class="skills-grid">
+        <% skills.forEach(skill => { %>
+          <div class="skills-card">
+            <div class="skill-icon">
+              <i class="fa-solid <%= skill.icon %>"></i>
+            </div>
+            <div class="skill-text">
+              <h3><%= skill.title %></h3>
+              <p><%= skill.desc %></p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO SECTION -->
+  <section class="portfolio" id="portofolio">
+    <div class="portfolio-title">
+      <span>PORTOFOLIO</span>
+    </div>
+
+    <div class="container-portfolio">
+      <div class="portfolio-grid">
+        <% const months = [
+            { name: 'Juli', link: '/portfolio/juli' },
+            { name: 'Agustus', link: '/portfolio/agustus' },
+            { name: 'September', link: '/portfolio/september' },
+            { name: 'Oktober', link: '/portfolio/oktober' }
+          ]; %>
+
+        <% months.forEach(m => { %>
+          <div class="portfolio-card">
+            <h3><%= m.name %></h3>
+            <p>Kumpulan proyek & progres pada bulan <%= m.name %>.</p>
+            <a href="<%= m.link %>" class="btn-lihat">Lihat</a>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS SECTION -->
+  <section id="projects" class="projects">
+    <div class="projects-title">
+    <span>MY PROJECTS</span>
+    </div>
+    
+    <div class="container-projects">
+    <article class="project-card">
+      <div class="project-image" style="background-image:url('assets/dashboard.astra.png')" aria-hidden="true"></div>
+    
+      <div class="project-body">
+        <h4 class="project-name">ASTRA Selapan</h4>
+        <p class="project-desc">Aplikasi manajemen poin siswa berbasis PHP CodeIgniter 3 dengan fitur CRUD siswa, jenis poin, dan pencatatan poin.</p>
+    
+        <div class="project-links">
+          <a href="https://github.com/Melanii2525/astra" class="btn outline" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </article>  
+    
+    <article class="project-card">
+      <div class="project-image" style="background-image:url('assets/dozu.png')" aria-hidden="true"></div>
+    
+      <div class="project-body">
+        <h4 class="project-name">Dozu Wristwear</h4>
+        <p class="project-desc">Aplikasi mobile toko online berbasis Flutter untuk penjualan aksesoris wanita.</p>
+    
+        <div class="project-links">
+          <a href="https://github.com/Melanii2525/dozu.wristwear" class="btn outline" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </article>
+    
+    <article class="project-card">
+      <div class="project-image" style="background-image:url('assets/lingtech.png')" aria-hidden="true"></div>
+    
+      <div class="project-body">
+        <h4 class="project-name">Lingtech</h4>
+        <p class="project-desc">Aplikasi mobile berbasis Flutter untuk belajar bahasa Inggris secara interaktif.</p>
+    
+        <div class="project-links">
+          <a href="https://github.com/Melanii2525/Lingtech/tree/main/lingtech" class="btn outline" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </article>  
+    
+    <article class="project-card">
+      <div class="project-image" style="background-image:url('assets/gelang.png')" aria-hidden="true"></div>
+
+      <div class="project-body">
+        <h4 class="project-name">Store Web Sederhana</h4>
+        <p class="project-desc">Aplikasi toko online sederhana berbasis React.js dan tampilan modern.</p>
+
+        <div class="project-links">
+          <a href="https://storegelang.vercel.app/" class="btn" target="_blank" rel="noopener">Live</a>
+          <a href="https://github.com/Melanii2525/Tugas2-Rakryan_React" class="btn outline" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card">
+      <div class="project-image" style="background-image:url('assets/port.png')" aria-hidden="true"></div>
+    
+      <div class="project-body">
+        <h4 class="project-name">Portofolio Sederhana</h4>
+        <p class="project-desc">Portofolio pribadi berbasis React.js untuk menampilkan profil dan contact.</p>
+    
+        <div class="project-links">
+          <a href="https://azzura25.vercel.app/" class="btn" target="_blank" rel="noopener">Live</a>
+          <a href="https://github.com/Melanii2525/azzura" class="btn outline" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </article>  
+
+    <article class="project-card">
+      <div class="project-image" style="background-image: url('assets/todo.png')" aria-hidden="true"></div>
+
+      <div class="project-body">
+        <h4 class="project-name">To Do List Sederhana</h4>
+        <p class="project-desc">To Do List sederhana berbasis React.js — tambah, hapus, dan sembunyikan tugas.</p>
+
+        <div class="project-links">
+          <a href="https://todo-beta-steel-77.vercel.app/" class="btn" target="_blank" rel="noopener">Live</a>
+          <a href="https://github.com/Melanii2525/todo" class="btn outline" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </article>
+    </div>
+  </section>
+
+  <!-- FEEDBACK SECTION -->
+  <section id="feedback" class="feedback">
+    <div class="feedback-title scroll-animate up">
+      <span>FEEDBACK</span>
+    </div>
+
+    <div class="feedback-container">
+      <form 
+        action="<%= editMode ? '/feedback/update/' + feedbackToEdit._id : '/feedback' %>" 
+        method="POST" 
+        enctype="multipart/form-data" 
+        class="feedback-form scroll-animate left">
+
+        <input type="text" name="nama" placeholder="Nama Anda" 
+          value="<%= feedbackToEdit ? feedbackToEdit.nama : '' %>" required>
+        <textarea name="pesan" placeholder="Tulis saran atau masukan..." required><%= feedbackToEdit ? feedbackToEdit.pesan : '' %></textarea>
+        
+        <label for="foto">Foto (opsional):</label>
+        <input type="file" name="foto" accept="image/*">
+
+        <% if (editMode) { %>
+          <button type="submit" class="btn">Update</button>
+          <a href="/about#feedback" class="btn outline">Batal</a>
+        <% } else { %>
+          <button type="submit" class="btn">Kirim</button>
+        <% } %>
+      </form>
+
+      <div class="feedback-list">
+        <% if (feedbacks && feedbacks.length > 0) { %>
+          <% feedbacks.forEach((fb, index) => { %>
+            <div class="feedback-item scroll-animate <%= index % 2 === 0 ? 'right' : 'left' %>">
+              <img src="<%= fb.foto || '/assets/default-user.png' %>" alt="Foto" class="feedback-img">
+              <div class="feedback-content">
+                <h4><%= fb.nama %></h4>
+                <p><%= fb.pesan %></p>
+                <form 
+                  action="/feedback/delete/<%= fb._id %>" 
+                  method="POST" 
+                  onsubmit="return confirmDelete(event)" 
+                  style="display:inline;">
+                  <button type="submit" class="btn outline">Hapus</button>
+                </form>
+                <a href="/feedback/edit/<%= fb._id %>#feedback" class="btn">Edit</a>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p class="no-feedback scroll-animate up">Tidak ada feedback untuk saat ini.</p>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER SECTION -->
+  <footer>
+    &copy; 2025 <a href="/">Melani Azzura</a>. All rights reserved.
+  </footer>
+  
+</body>
+</html>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("menu");
+  const menuLinks = document.querySelectorAll("#menu a"); 
+
+  toggle.addEventListener("click", () => {
+    toggle.classList.toggle("active");
+    menu.classList.toggle("active");
+  });
+
+  menuLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      toggle.classList.remove("active");
+      menu.classList.remove("active");
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const alertBox = document.querySelector(".alert-box");
+    if (alertBox) {
+      setTimeout(() => {
+        alertBox.style.opacity = "0";
+        alertBox.style.transition = "opacity 0.6s ease";
+        setTimeout(() => alertBox.remove(), 600);
+      }, 3000);
+    }
+  });
+</script>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const msg = params.get("msg");
+  const type = params.get("type");
+
+  if (msg) {
+    localStorage.setItem("alertMessage", msg);
+    localStorage.setItem("alertType", type || "success");
+
+    window.history.replaceState({}, "", "/about#feedback");
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const message = localStorage.getItem("alertMessage");
+    const alertType = localStorage.getItem("alertType");
+
+    if (message) {
+      const alertBox = document.createElement("div");
+      alertBox.className = `alert-box alert-${alertType || "success"}`;
+      alertBox.textContent = message;
+      document.body.appendChild(alertBox);
+
+      setTimeout(() => {
+        alertBox.classList.add("hide");
+        setTimeout(() => alertBox.remove(), 500);
+      }, 3000);
+
+      localStorage.removeItem("alertMessage");
+      localStorage.removeItem("alertType");
+    }
+  });
+</script>
+
+<script>
+  function confirmDelete(event) {
+    event.preventDefault(); 
+
+    const confirmBox = document.createElement("div");
+    confirmBox.className = "confirm-box";
+    confirmBox.innerHTML = `
+      <div class="confirm-content">
+        <h4>Yakin hapus feedback ini?</h4>
+        <p>Tindakan ini tidak bisa dibatalkan.</p>
+        <div class="confirm-actions">
+          <button id="confirmYes" class="btn danger">Ya, hapus</button>
+          <button id="confirmNo" class="btn outline">Batal</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(confirmBox);
+
+    document.getElementById("confirmNo").onclick = () => confirmBox.remove();
+
+    document.getElementById("confirmYes").onclick = () => {
+      confirmBox.remove();
+      event.target.submit(); 
+    };
+
+    return false;
+  }
+</script>
+
+<script>
+  if (window.location.hash === "#feedback") {
+    const section = document.querySelector("#feedback");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+</script>
+
+<script>
+  function showAlert(message, type = "success") {
+    const alertBox = document.getElementById("alertBox");
+    const alertMessage = document.getElementById("alertMessage");
+
+    alertBox.className = "alert alert-dismissible fade show";
+
+    if (type === "success") {
+      alertBox.classList.add("alert-success");
+      message = "✅ " + message;
+    } else if (type === "warning") {
+      alertBox.classList.add("alert-warning");
+      message = "✏️ " + message;
+    } else if (type === "danger") {
+      alertBox.classList.add("alert-danger");
+      message = "🗑️ " + message;
+    }
+
+    alertMessage.textContent = message;
+    alertBox.classList.remove("d-none");
+
+    setTimeout(() => {
+      alertBox.classList.remove("show");
+      setTimeout(() => alertBox.classList.add("d-none"), 500);
+    }, 3000);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const msg = localStorage.getItem("alertMessage");
+    const type = localStorage.getItem("alertType");
+
+    if (msg) {
+      showAlert(msg, type || "success");
+      localStorage.removeItem("alertMessage");
+      localStorage.removeItem("alertType");
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.skill .bar').forEach(bar => {
+      const target = bar.style.width;
+      bar.style.width = '0';
+      setTimeout(() => bar.style.width = target, 200);
+    });
+  });
+</script>  
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const fadeEls = document.querySelectorAll(".fade-up");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        } else {
+          setTimeout(() => {
+            entry.target.classList.remove("show");
+          }, 150); 
+        }
+      });
+    }, { threshold: 0.15 });
+
+    fadeEls.forEach(el => observer.observe(el));
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const slideEls = document.querySelectorAll(".about-img, .about-info, .skill, .btn-cv");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+        } else {
+          entry.target.classList.remove("show"); 
+        }
+      });
+    }, { threshold: 0.2 });
+
+    slideEls.forEach(el => observer.observe(el));
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const skillTitle = document.querySelector(".skill-title");
+    const skillCards = document.querySelectorAll(".skills-card");
+
+    const titleObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          } else {
+            entry.target.classList.remove("show"); 
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (skillTitle) titleObserver.observe(skillTitle);
+
+    const cardObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          } else {
+            entry.target.classList.remove("show"); 
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    skillCards.forEach((card) => cardObserver.observe(card));
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const title = document.querySelector(".portfolio-title");
+    const cards = document.querySelectorAll(".portfolio-card");
+
+    const titleObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          } else {
+            entry.target.classList.remove("show"); 
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    if (title) titleObserver.observe(title);
+
+    const cardObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            const direction = index % 2 === 0 ? "show-left" : "show-right";
+            entry.target.classList.add(direction);
+          } else {
+            entry.target.classList.remove("show-left", "show-right"); 
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    cards.forEach((card) => cardObserver.observe(card));
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const title = document.querySelector(".projects-title");
+    const cards = document.querySelectorAll(".project-card");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const el = entry.target;
+
+          if (entry.isIntersecting) {
+            if (el.classList.contains("projects-title")) {
+              el.classList.add("show");
+            } else if (el.classList.contains("project-card")) {
+              el.classList.add("visible");
+            }
+          } else {
+            el.classList.remove("show", "visible");
+          }
+        });
+      },
+      { threshold: 0.3 } 
+    );
+
+    if (title) observer.observe(title);
+
+    cards.forEach((card, index) => {
+      observer.observe(card);
+      card.style.animationDelay = `${index * 0.15}s`;
+    });
+  });
+</script>
+
+<script>
+  const feedbackTitle = document.querySelector('.feedback-title');
+  function checkFeedbackTitleVisible() {
+    if (!feedbackTitle) return;
+    const rect = feedbackTitle.getBoundingClientRect();
+    const isVisible = rect.top < window.innerHeight - 100;
+    if (isVisible) {
+      feedbackTitle.classList.add('show');
+    } else {
+      feedbackTitle.classList.remove('show');
+    }
+  }
+  window.addEventListener('scroll', checkFeedbackTitleVisible);
+  window.addEventListener('load', checkFeedbackTitleVisible);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const feedbackListItems = document.querySelectorAll('.feedback-list .feedback-item, .no-feedback');
+    feedbackListItems.forEach((item, index) => {
+      if (!item.classList.contains('scroll-animate')) {
+        item.classList.add('scroll-animate');
+        item.classList.add(index % 2 === 0 ? 'right' : 'left');
+      }
+    });
+
+    const elements = document.querySelectorAll('.scroll-animate');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        } else {
+          entry.target.classList.remove('show');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    elements.forEach(el => observer.observe(el));
+  });
+</script>

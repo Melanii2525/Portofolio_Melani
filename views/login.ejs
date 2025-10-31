@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Admin</title>
+  <link rel="stylesheet" href="/css/login.css" />
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-left">
+      <div class="overlay"></div>
+      <div class="login-text">
+        <h4>Halo Admin!!</h4>
+        <p>Kelola portofolio dan konten dengan mudah.</p>
+      </div>
+    </div>
+
+    <div class="login-right">
+      <h2>Masuk ke Halaman Admin</h2>
+      <p>Gunakan username dan password yang sudah tersedia untuk melanjutkan</p>
+
+      <% if (error) { %>
+        <div class="alert-danger"><%= error %></div>
+      <% } %>
+
+      <form action="/login" method="POST">
+        <input type="text" name="username" class="form-control" placeholder="Username" required />
+        <input type="password" name="password" class="form-control" placeholder="Password" required />
+        <button type="submit" class="btn-primary">Masuk</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

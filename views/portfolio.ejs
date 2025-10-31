@@ -1,0 +1,665 @@
+  <!DOCTYPE html>
+  <html lang="id">
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Portofolio Bulan <%= month %></title>
+    <link rel="stylesheet" href="/css/portfolio.css">
+  </head>
+  <body>
+    <div class="container">
+      <div id="alertBox" class="alert d-none" role="alert">
+        <span id="alertMessage"></span>
+      </div>      
+
+      <% if (user && user.isAdmin) { %>
+        <div class="alert alert-info text-center">
+          👑 Anda berada di <strong>mode Admin</strong> |
+          <a href="/logout" class="text-decoration-none">Keluar</a>
+        </div>
+      <% } %>      
+
+      <h1 style="text-transform: capitalize;">Portofolio Bulan <%= month %></h1>
+      <h2 class="h2"><%= monthDescription %></h2>
+
+      <button id="btnTambah" class="btn" data-admin="<%= isAdmin %>">
+        <i class="fa-solid fa-plus"></i> Tambah Proyek
+      </button>      
+
+      <div id="modal" class="modal hidden">
+        <div class="modal-content">
+          <span id="closeModal" class="close">&times;</span>
+          <h2>Tambah Proyek Baru</h2>
+
+          <form id="formTambah" action="/portfolio/api/<%= month %>" method="post" enctype="multipart/form-data">
+            <label>Judul Proyek</label>
+            <input type="text" name="title" required placeholder="Judul Proyek">
+            <div class="invalid-feedback">Judul wajib diisi.</div>
+          
+            <label>Deskripsi Proyek</label>
+            <textarea name="description" required placeholder="Deskripsi Proyek"></textarea>
+            <div class="invalid-feedback">Deskripsi wajib diisi.</div>
+          
+            <div id="gambarContainer">
+              <div class="gambar-group">
+                <label>Judul Gambar</label>
+                <input type="text" name="imageTitles" placeholder="Judul Gambar" required>
+                <div class="invalid-feedback">Judul gambar wajib diisi.</div>
+          
+                <label>Gambar</label>
+                <input type="file" name="images" accept="image/*" required>
+                <div class="invalid-feedback">Pilih file gambar.</div>
+          
+                <label>Deskripsi Gambar</label>
+                <input type="text" name="imageDescriptions" placeholder="Deskripsi Gambar" required>
+                <div class="invalid-feedback">Deskripsi gambar wajib diisi.</div>
+              </div>
+            </div>
+          
+            <button type="button" id="btnTambahGambar" class="btn-small">Tambah Gambar Lain</button>
+            <button type="submit" class="btn">Simpan Proyek</button>
+          </form>        
+        </div>
+      </div>
+
+      <ul class="project-list">
+        <% projects.forEach((project) => { %>
+          <li class="project-item">
+            <div class="btn-actions" data-admin="<%= isAdmin %>">
+              <button class="btn-edit" data-id="<%= project._id %>">
+                <i class="fa-solid fa-pen"></i> Edit
+              </button>
+              <button class="btn-delete" data-id="<%= project._id %>">
+                <i class="fa-solid fa-trash"></i> Hapus
+              </button>
+            </div>                     
+
+            <h2 class="project-title"><%= project.title %></h2>
+            <p class="project-desc"><%= project.description %></p>
+            <% if (project.images && project.images.length > 0) { %>
+              <div class="carousel" data-count="<%= project.images.length %>">
+                <div class="carousel-inner">
+                  <button class="carousel-btn prev <%= project.images.length > 1 ? '' : 'hidden-btn' %>">&#10094;</button>
+   
+                  <div class="carousel-track">
+                    <% project.images.forEach((img, idx) => { %>
+                      <div class="carousel-item <%= idx === 0 ? 'active' : '' %>">
+                        <div class="carousel-content">
+                          <div class="carousel-image">
+                            <img src="/uploads/<%= img.filename %>" alt="<%= project.imageDescriptions[idx] %>">
+                          </div>
+                          <div class="carousel-text">
+                            <% if (project.imageTitles && project.imageTitles[idx]) { %>
+                              <h3><%= project.imageTitles[idx] %></h3>
+                            <% } %>
+                            <p><%= project.imageDescriptions[idx] %></p>
+                          </div>
+                        </div>
+                      </div>
+                    <% }) %>
+                  </div>
+                  <button class="carousel-btn next <%= project.images.length > 1 ? '' : 'hidden-btn' %>">&#10095;</button>
+                </div>
+              
+                <% if (project.images.length > 1) { %>
+                  <div class="carousel-dots">
+                    <% project.images.forEach((_, idx) => { %>
+                      <span class="dot <%= idx === 0 ? 'active' : '' %>"></span>
+                    <% }) %>
+                  </div>
+                <% } %>
+              </div>                                      
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>    
+
+      <div id="deleteConfirm" class="confirm-modal hidden">
+        <div class="confirm-box">
+          <h3>Yakin hapus proyek ini?</h3>
+          <p>Tindakan ini tidak bisa dibatalkan.</p>
+          <div class="confirm-actions">
+            <button id="btnYesDelete" class="btn-danger">Ya, hapus</button>
+            <button id="btnCancelDelete" class="btn-cancel">Batal</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="modalEdit" class="modal hidden">
+        <div class="modal-content">
+          <span id="closeModalEdit" class="close">&times;</span>
+          <h2>Edit Proyek</h2>
+          <form id="formEdit" method="POST" enctype="multipart/form-data">
+            <label>Judul Proyek</label>
+            <input type="text" name="title" required>
+
+            <label>Deskripsi Proyek</label>
+            <textarea name="description" required></textarea>
+
+            <div id="gambarEditContainer">
+            </div>
+
+            <button type="button" id="btnTambahGambarEdit" class="btn-small">Tambah Gambar Baru</button>
+            <button type="submit" class="btn">Update Proyek</button>
+          </form>
+        </div>
+      </div>
+
+      <a href="/about#portofolio" class="btn-back">⬅ Kembali ke Portofolio</a>
+    </div>
+
+    <div id="loginAlertModal" class="confirm-modal hidden">
+      <div class="confirm-box">
+        <h3>Anda bukan Admin</h3>
+        <p>Login terlebih dahulu sebagai Admin agar bisa menambah, edit, dan hapus proyek.</p>
+        <div class="confirm-actions">
+          <button id="btnLoginNow" class="btn btn-primary">Login</button>
+          <button id="btnCancelLogin" class="btn btn-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function initCarousel(carousel) {
+        if (carousel.dataset.initialized) return; 
+        carousel.dataset.initialized = "true";
+        
+        const track = carousel.querySelector(".carousel-track");
+        const items = carousel.querySelectorAll(".carousel-item");
+        const prevBtn = carousel.querySelector(".prev");
+        const nextBtn = carousel.querySelector(".next");
+        const dots = carousel.querySelectorAll(".dot");
+        let index = 0;
+    
+        function showSlide(i) {
+          items.forEach((item, idx) => {
+            item.classList.toggle("active", idx === i);
+          });
+          dots.forEach((dot, idx) => {
+            dot.classList.toggle("active", idx === i);
+          });
+          index = i;
+        }
+    
+        if (prevBtn) {
+          prevBtn.addEventListener("click", () => {
+            let newIndex = (index - 1 + items.length) % items.length;
+            showSlide(newIndex);
+          });
+        }
+        if (nextBtn) {
+          nextBtn.addEventListener("click", () => {
+            let newIndex = (index + 1) % items.length;
+            showSlide(newIndex);
+          });
+        }
+        dots.forEach((dot, idx) => {
+          dot.addEventListener("click", () => showSlide(idx));
+        });
+
+        showSlide(0);
+      }
+  
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".carousel").forEach(carousel => {
+          initCarousel(carousel);
+        });
+      });
+    </script>    
+    
+    <script>
+      function showAlert(message, type = "success") {
+        const alertBox = document.getElementById("alertBox");
+        const alertMessage = document.getElementById("alertMessage");
+
+        alertBox.className = "alert alert-dismissible fade show";
+
+        if (type === "success") {
+          alertBox.classList.add("alert-success"); 
+          message = "✅ " + message;
+        } else if (type === "warning") {
+          alertBox.classList.add("alert-warning"); 
+          message = "✏️ " + message;
+        } else if (type === "danger") {
+          alertBox.classList.add("alert-danger"); 
+          message = "🗑️ " + message;
+        }
+
+        alertMessage.textContent = message;
+
+        alertBox.classList.remove("d-none");
+
+        setTimeout(() => {
+          alertBox.classList.remove("show");
+          setTimeout(() => {
+            alertBox.classList.add("d-none");
+          }, 500);
+        }, 3000);
+      }
+    </script>
+
+    <script>
+      btnTambahGambar.addEventListener("click", () => {
+        const div = document.createElement("div");
+        div.classList.add("gambar-group");
+        div.innerHTML = `
+          <label>Judul Gambar</label>
+          <input type="text" name="imageTitles" placeholder="Judul Gambar">
+          <label>Gambar</label>
+          <input type="file" name="images" accept="image/*">
+          <label>Deskripsi Gambar</label>
+          <input type="text" name="imageDescriptions" placeholder="Deskripsi Gambar">
+        `;
+        gambarContainer.appendChild(div);
+        div.scrollIntoView({ behavior: "smooth", block: "end" });
+      });
+    </script>
+
+    <script>
+      const modalEdit = document.getElementById('modalEdit');
+      const closeModalEdit = document.getElementById('closeModalEdit');
+      const formEdit = document.getElementById('formEdit');
+      const gambarEditContainer = document.getElementById('gambarEditContainer');
+      const btnTambahGambarEdit = document.getElementById('btnTambahGambarEdit');
+
+      document.querySelector(".project-list").addEventListener("click", async e => {
+        if (e.target.closest(".btn-edit")) {
+          const btn = e.target.closest(".btn-edit");
+          const projectId = btn.dataset.id;
+          try {
+            const res = await fetch(`/portfolio/api/project/${projectId}`);
+            if (!res.ok) throw new Error("Gagal fetch proyek");
+            const project = await res.json();
+
+            formEdit.action = `/portfolio/${project.month}/${project._id}`;
+            formEdit.querySelector('[name="title"]').value = project.title;
+            formEdit.querySelector('[name="description"]').value = project.description;
+            gambarEditContainer.innerHTML = "";
+
+            project.images.forEach((img, idx) => {
+              const div = document.createElement("div");
+              div.classList.add("gambar-group");
+              div.innerHTML = `
+                <label>Judul Gambar</label>
+                <input type="text" name="imageTitles" value="${project.imageTitles[idx] || ''}" required>
+                <label>Ganti Gambar (biarkan kosong jika tidak ingin ganti)</label>
+                <input type="file" name="images" accept="image/*">
+                <label>Deskripsi Gambar</label>
+                <input type="text" name="imageDescriptions" value="${project.imageDescriptions[idx] || ''}" required>
+                <img src="/uploads/${img.filename}" alt="Preview" style="width:100px; margin-top:5px;">
+                <input type="hidden" name="oldFilenames" value="${img.filename}">
+              `;
+              gambarEditContainer.appendChild(div);
+            });
+
+            modalEdit.classList.remove("hidden");
+          } catch (err) {
+            console.error(err);
+            showAlert("Gagal membuka form edit", "danger");
+          }
+        }
+
+        if (e.target.closest(".btn-delete")) {
+          const btn = e.target.closest(".btn-delete");
+          const projectId = btn.dataset.id;
+
+          const modal = document.getElementById("deleteConfirm");
+          modal.classList.remove("hidden");
+
+          const yesBtn = document.getElementById("btnYesDelete");
+          const cancelBtn = document.getElementById("btnCancelDelete");
+
+          const newYes = yesBtn.cloneNode(true);
+          yesBtn.parentNode.replaceChild(newYes, yesBtn);
+
+          newYes.addEventListener("click", async () => {
+            try {
+              const res = await fetch(`/portfolio/api/project/${projectId}`, { method: "DELETE" });
+              const data = await res.json();
+              if (data.success) {
+                btn.closest(".project-item").remove();
+                showAlert("Proyek berhasil dihapus!", "danger");
+              } else {
+                showAlert("Gagal menghapus proyek.", "danger");
+              }
+            } catch (err) {
+              console.error(err);
+              showAlert("❌ Terjadi kesalahan jaringan.", "danger");
+            } finally {
+              modal.classList.add("hidden");
+            }
+          });
+
+          cancelBtn.addEventListener("click", () => {
+            modal.classList.add("hidden");
+          });
+        }
+      });
+
+      closeModalEdit.addEventListener("click", () => modalEdit.classList.add("hidden"));
+      window.addEventListener("click", e => {
+        if (e.target === modalEdit) modalEdit.classList.add("hidden");
+      });
+
+      btnTambahGambarEdit.addEventListener("click", () => {
+        const div = document.createElement("div");
+        div.classList.add("gambar-group");
+        div.innerHTML = `
+          <label>Judul Gambar</label>
+          <input type="text" name="imageTitles" placeholder="Judul Gambar" required>
+          <label>Gambar</label>
+          <input type="file" name="images" accept="image/*">
+          <label>Deskripsi Gambar</label>
+          <input type="text" name="imageDescriptions" placeholder="Deskripsi Gambar" required>
+        `;
+        gambarEditContainer.appendChild(div);
+        div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      });
+
+      formEdit.addEventListener("submit", async e => {
+        e.preventDefault();
+        const formData = new FormData(formEdit);
+        try {
+          const res = await fetch(formEdit.action, { method: "POST", body: formData });
+          if (!res.ok) throw new Error("Gagal update proyek");
+          const data = await res.json();
+
+          if (data.success) {
+            modalEdit.classList.add("hidden");
+            localStorage.setItem("alertMessage", "Proyek berhasil diupdate!");
+            localStorage.setItem("alertType", "warning");
+            smoothReload();
+
+            const project = data.project;
+            const li = document.querySelector(`.btn-edit[data-id="${project._id}"]`).closest(".project-item");
+
+            let imagesHtml = "";
+            if (project.images && project.images.length > 0) {
+              imagesHtml = `
+                <div class="carousel" data-count="${project.images.length}">
+                  <div class="carousel-track">
+                    ${project.images.map((img, idx) => {
+                      const src = `/uploads/${img.filename}?v=${Date.now()}`;
+                      return `
+                        <div class="carousel-item ${idx === 0 ? "active" : ""}">
+                          <div class="carousel-content">
+                            <div class="carousel-image">
+                              <img src="${src}" alt="${project.imageDescriptions[idx] || ""}">
+                            </div>
+                            <div class="carousel-text">
+                              ${project.imageTitles && project.imageTitles[idx] ? `<h3>${project.imageTitles[idx]}</h3>` : ""}
+                              <p>${project.imageDescriptions[idx] || ""}</p>
+                            </div>
+                          </div>
+                        </div>
+                      `;
+                    }).join("")}
+                  </div>
+                  ${
+                    project.images.length > 1
+                      ? `
+                    <button class="carousel-btn prev">&#10094;</button>
+                    <button class="carousel-btn next">&#10095;</button>
+                    <div class="carousel-dots">
+                      ${project.images.map((_, idx) => `<span class="dot ${idx === 0 ? "active" : ""}"></span>`).join("")}
+                    </div>
+                  ` : ""
+                  }
+                </div>
+              `;
+            }
+
+            li.innerHTML = `
+              <div class="btn-actions">
+                <button class="btn-edit" data-id="${project._id}">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </button>
+                <button class="btn-delete" data-id="${project._id}">
+                  <i class="fa-solid fa-trash"></i> Hapus
+                </button>
+              </div>
+              <h2 class="project-title">${project.title}</h2>
+              <p class="project-desc">${project.description}</p>
+              ${imagesHtml}
+            `;
+
+            project.images.forEach(img => {
+              const preload = new Image();
+              preload.src = `/uploads/${img.filename}?v=${Date.now()}`;
+            });
+          } else {
+            showAlert("❌ " + (data.error || "Gagal mengupdate proyek."), "danger");
+          }
+        } catch (err) {
+          console.error(err);
+          showAlert("❌ Terjadi kesalahan jaringan saat update.", "danger");
+        }
+      });
+    </script>
+
+    <script>
+      const formTambah = document.getElementById("formTambah");
+
+      formTambah.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let valid = true;
+        formTambah.querySelectorAll(".is-invalid").forEach((el) =>
+          el.classList.remove("is-invalid")
+        );
+
+        const titleInput = formTambah.querySelector('input[name="title"]');
+        if (!titleInput.value.trim()) {
+          titleInput.classList.add("is-invalid");
+          valid = false;
+        }
+
+        const descInput = formTambah.querySelector('textarea[name="description"]');
+        if (!descInput.value.trim()) {
+          descInput.classList.add("is-invalid");
+          valid = false;
+        }
+
+        const firstImage = formTambah.querySelector(
+          "#gambarContainer input[type='file']"
+        );
+        if (!firstImage.value) {
+          firstImage.classList.add("is-invalid");
+          valid = false;
+        }
+
+        if (!valid) return;
+
+        const formData = new FormData(formTambah);
+        fetch(formTambah.action, { method: "POST", body: formData })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              formTambah.reset();
+              document.getElementById("modal").classList.add("hidden");
+              localStorage.setItem("alertMessage", "Proyek berhasil ditambahkan!");
+              localStorage.setItem("alertType", "success");
+              smoothReload();
+
+              const project = data.project;
+              const li = document.createElement("li");
+              li.classList.add("project-item");
+
+              let imagesHtml = "";
+              if (project.images && project.images.length > 0) {
+                imagesHtml = `
+                  <div class="carousel" data-count="${project.images.length}">
+                    <div class="carousel-track">
+                      ${project.images
+                        .map(
+                          (img, idx) => `
+                        <div class="carousel-item ${
+                          idx === 0 ? "active" : ""
+                        }">
+                          <div class="carousel-content">
+                            <div class="carousel-image">
+                              <img src="/uploads/${img.filename}?v=${Date.now()}" alt="${
+                            project.imageDescriptions[idx] || ""
+                          }">
+                            </div>
+                            <div class="carousel-text">
+                              ${
+                                project.imageTitles &&
+                                project.imageTitles[idx]
+                                  ? `<h3>${project.imageTitles[idx]}</h3>`
+                                  : ""
+                              }
+                              <p>${project.imageDescriptions[idx] || ""}</p>
+                            </div>
+                          </div>
+                        </div>
+                      `
+                        )
+                        .join("")}
+                    </div>
+                    ${
+                      project.images.length > 1
+                        ? `
+                      <button class="carousel-btn prev">&#10094;</button>
+                      <button class="carousel-btn next">&#10095;</button>
+                      <div class="carousel-dots">
+                        ${project.images
+                          .map(
+                            (_, idx) =>
+                              `<span class="dot ${
+                                idx === 0 ? "active" : ""
+                              }"></span>`
+                          )
+                          .join("")}
+                      </div>
+                    `
+                        : ""
+                    }
+                  </div>
+                `;
+              }
+
+              li.innerHTML = `
+                <div class="btn-actions">
+                  <button class="btn-edit" data-id="${project._id}">
+                    <i class="fa-solid fa-pen"></i> Edit
+                  </button>
+                  <button class="btn-delete" data-id="${project._id}">
+                    <i class="fa-solid fa-trash"></i> Hapus
+                  </button>
+                </div>
+                <h2 class="project-title">${project.title}</h2>
+                <p class="project-desc">${project.description}</p>
+                ${imagesHtml}
+              `;
+
+              li.querySelectorAll(".carousel").forEach(initCarousel);
+
+              document.querySelector(".project-list").appendChild(li);
+            }
+          })
+          .catch((err) => {
+            console.error("Error:", err);
+            showAlert("❌ Terjadi kesalahan saat menambahkan proyek.", "danger");
+          });
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const msg = localStorage.getItem("alertMessage");
+        const type = localStorage.getItem("alertType");
+
+        if (msg) {
+          showAlert(msg, type || "success");
+          localStorage.removeItem("alertMessage");
+          localStorage.removeItem("alertType");
+        }
+      });
+    </script>
+
+    <script>
+      function smoothReload() {
+        document.body.style.opacity = "0"; 
+        setTimeout(() => {
+          location.reload();
+        }, 300);
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        requestAnimationFrame(() => {
+          document.body.classList.add("ready");
+        });
+      });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const isAdmin = <%= JSON.stringify(isAdmin) %>;
+        const btnTambah = document.getElementById("btnTambah");
+        const modalTambah = document.getElementById("modal");
+        const closeModal = document.getElementById("closeModal");
+        const modalLogin = document.getElementById("loginAlertModal");
+        const btnLogin = document.getElementById("btnLoginNow");
+        const btnCancel = document.getElementById("btnCancelLogin");
+
+        const hasPendingAlert = localStorage.getItem("alertMessage");
+        const adminAlertShown = localStorage.getItem("adminAlertShown");
+
+        if (isAdmin) {
+          if (!adminAlertShown) {
+            setTimeout(() => {
+              showAlert("Anda berada di halaman Admin", "success");
+            }, 500);
+            localStorage.setItem("adminAlertShown", "true");
+          }
+
+          if (btnTambah) {
+            btnTambah.addEventListener("click", () => modalTambah.classList.remove("hidden"));
+          }
+          if (closeModal) {
+            closeModal.addEventListener("click", () => modalTambah.classList.add("hidden"));
+          }
+          window.addEventListener("click", e => {
+            if (e.target === modalTambah) modalTambah.classList.add("hidden");
+          });
+        }
+    
+        else {
+          localStorage.removeItem("adminAlertShown");
+
+          document.querySelectorAll("#btnTambah, .btn-edit, .btn-delete").forEach(btn => {
+            btn.addEventListener("click", e => {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              modalLogin.classList.remove("hidden");
+            });
+          });
+
+          if (btnLogin) {
+            btnLogin.addEventListener("click", () => window.location.href = "/login");
+          }
+          if (btnCancel) {
+            btnCancel.addEventListener("click", () => modalLogin.classList.add("hidden"));
+          }
+
+          window.addEventListener("click", e => {
+            if (e.target === modalLogin) modalLogin.classList.add("hidden");
+          });
+        }
+      });
+    </script>  
+
+    <script>
+      const isAdmin = <%= JSON.stringify(isAdmin) %>;
+
+      if (isAdmin) {
+        setInterval(() => {
+          navigator.sendBeacon("/heartbeat");
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>
