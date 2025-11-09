@@ -9,7 +9,7 @@
     display: flex;
     height: 100vh;
     width: 100vw;
-    background: #1A141A;
+    background: linear-gradient(to bottom, #1a141a, #423738);
     color: #F4B315; 
   }
 
